@@ -1,0 +1,22 @@
+:host(:not([focused])) [part="checkbox"] {
+    background-color: gray;
+    border-style: solid;
+    border-width: thin;
+    border-color: darkGray;
+}
+
+:host([focused]) [part="checkbox"] {
+    background-color: red;
+    opacity: 1;
+    border-style: solid;
+    border-width: thin;
+    border-color: red;
+}
+
+:host([checked]) [part="checkbox"] {
+    background-color: black;
+}
+
+:host(:not([checked])) [part="checkbox"] {
+    background-color: darkGray;
+}
