@@ -107,6 +107,8 @@ public class ApplicationStartView extends VerticalLayout {
 	}
 
 	private void addDirectoryComponent() {
+		VerticalLayout layout = new VerticalLayout();
+		layout.setWidthFull();
 		grid = new Grid<>(20);
 		grid
 				.addColumn(fileData -> fileData.getFileName())
@@ -124,8 +126,14 @@ public class ApplicationStartView extends VerticalLayout {
 										"ApplicationStartView.grid.header.fileSize.label",
 										LocalizationSO.DE))
 				.setSortable(true);
-		BorderUtils.addShadowBorder(grid);
-		add(grid);
+		BorderUtils.addShadowBorder(layout);
+//		grid.getStyle().set("margin-top", "15px");
+//		grid.getStyle().set("margin-right", "15px");
+//		grid.getStyle().set("margin-bottom", "15px");
+//		grid.getStyle().set("margin-left", "15px");
+		layout.setPadding(true);
+		layout.add(grid);
+		add(layout);
 		updateView();
 	}
 
