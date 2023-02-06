@@ -127,10 +127,6 @@ public class ApplicationStartView extends VerticalLayout {
 										LocalizationSO.DE))
 				.setSortable(true);
 		BorderUtils.addShadowBorder(layout);
-//		grid.getStyle().set("margin-top", "15px");
-//		grid.getStyle().set("margin-right", "15px");
-//		grid.getStyle().set("margin-bottom", "15px");
-//		grid.getStyle().set("margin-left", "15px");
 		layout.setPadding(true);
 		layout.add(grid);
 		add(layout);
