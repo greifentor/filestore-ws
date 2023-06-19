@@ -12,7 +12,7 @@
 
 	<groupId>de.ollie</groupId>
 	<artifactId>filestore-ws</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 
 	<name>File Store WS</name>

@@ -1,5 +1,6 @@
 package de.ollie.filestore.ws.gui.vaadin;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -11,12 +12,15 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
 import de.ollie.filestore.ws.core.model.localization.LocalizationSO;
@@ -110,8 +114,20 @@ public class ApplicationStartView extends VerticalLayout {
 		VerticalLayout layout = new VerticalLayout();
 		layout.setWidthFull();
 		grid = new Grid<>(20);
-		grid
-				.addColumn(fileData -> fileData.getFileName())
+		grid.addColumn(new ComponentRenderer<Anchor, FileData>(fileData -> {
+			StreamResource streamResource = new StreamResource(fileData.getFileName(), () -> {
+				try {
+					return new FileInputStream(directoryProvider.getUploadDirectory() + "/" + fileData.getFileName());
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
+			streamResource.setContentType("application/gzip");
+			Anchor anchor = new Anchor("", fileData.getFileName());
+			anchor.setHref(streamResource);
+			anchor.setId("download");
+			return anchor;
+		}))
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
