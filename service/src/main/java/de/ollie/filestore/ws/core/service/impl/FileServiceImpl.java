@@ -1,5 +1,6 @@
 package de.ollie.filestore.ws.core.service.impl;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,10 +50,12 @@ public class FileServiceImpl implements FileService {
 				LOG.info("reading bytes " + offset + " to " + bufferSize + " of file: " + fileName);
 				readBytesReturn = inputStreamReader.readBytes(inputStream, offset, bufferSize);
 				LOG.info("read " + readBytesReturn.getCountOfReadBytes() + " of file: " + fileName);
-				outputStream.write(readBytesReturn.getReadBytes(), offset, readBytesReturn.getCountOfReadBytes());
-				outputStream.flush();
-				LOG.info("wrote bytes " + offset + " to " + bufferSize + " of file: " + fileName);
-				offset += readBytesReturn.getCountOfReadBytes();
+				if (readBytesReturn.getCountOfReadBytes() > -1) {
+					outputStream.write(readBytesReturn.getReadBytes(), offset, readBytesReturn.getCountOfReadBytes());
+					outputStream.flush();
+					LOG.info("wrote bytes " + offset + " to " + bufferSize + " of file: " + fileName);
+					offset += readBytesReturn.getCountOfReadBytes();
+				}
 			} while (readBytesReturn.getCountOfReadBytes() == bufferSize);
 		} catch (IOException ioe) {
 			throw ioe;
@@ -61,6 +64,11 @@ public class FileServiceImpl implements FileService {
 			inputStream.close();
 		}
 		LOG.info("file stored: " + fileName);
+	}
+
+	@Override
+	public void removeFile(String fileName) {
+		new File(directoryProvider.getUploadDirectory() + "/" + fileName).delete();
 	}
 
 }

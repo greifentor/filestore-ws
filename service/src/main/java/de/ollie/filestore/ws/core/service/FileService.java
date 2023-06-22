@@ -20,4 +20,6 @@ public interface FileService {
 
 	void storeStreamContentInFile(String fileName, InputStream inputStream) throws IOException;
 
+	void removeFile(String fileName);
+
 }
