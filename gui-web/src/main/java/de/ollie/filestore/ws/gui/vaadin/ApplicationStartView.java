@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Anchor;
@@ -139,9 +140,26 @@ public class ApplicationStartView extends VerticalLayout {
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
-										"ApplicationStartView.grid.header.fileSize.label",
+										"ApplicationStartView.grid.header.fileName.label",
 										LocalizationSO.DE))
 				.setSortable(true);
+		grid.addColumn(new ComponentRenderer<Button, FileData>(fileData -> {
+			Button button =
+					new Button(
+							resourceManager
+									.getLocalizedString(
+											"ApplicationStartView.grid.header.remove.button.label",
+											LocalizationSO.DE));
+			button.addClickListener(event -> {
+				fileService.removeFile(fileData.getFileName());
+				updateView();
+			});
+			return button;
+		}))
+				.setHeader(
+						resourceManager
+								.getLocalizedString("ApplicationStartView.grid.header.remove.label", LocalizationSO.DE))
+				.setSortable(false);
 		BorderUtils.addShadowBorder(layout);
 		layout.setPadding(true);
 		layout.add(grid);

@@ -1,1 +1,1 @@
-java -jar target/filestore-ws-gui-0.0.2.jar
+java -jar target/filestore-ws-gui-1.0.0.jar

@@ -15,7 +15,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,25 +77,43 @@ public class FileServiceImplTest {
 		}
 
 		@Test
-		@Disabled
 		void createsAFileWithPassedNameInTheConfiguredDirectory_passAFileNameAndInputStream(@TempDir Path tempDir)
 				throws Exception {
+			// Prepare
 			when(directoryProvider.getUploadDirectory()).thenReturn(new File(tempDir.toString()));
+			when(directoryProvider.getUploadMaxFileSize()).thenReturn(42);
+			// Run
 			unitUnderTest.storeStreamContentInFile(FILE_NAME, inputStream);
+			// Check
 			assertTrue(new File(tempDir.toString() + "/" + FILE_NAME).exists());
 		}
 
 		@Test
-		@Disabled
 		void createsAFileWithCorrectContentInTheConfiguredDirectory_passAFileNameAndInputStream(@TempDir Path tempDir)
 				throws Exception {
 			// Prepare
 			when(directoryProvider.getUploadDirectory()).thenReturn(new File(tempDir.toString()));
+			when(directoryProvider.getUploadMaxFileSize()).thenReturn(42);
 			// Run
 			unitUnderTest.storeStreamContentInFile(FILE_NAME, inputStream);
 			// Check
 			String written = Files.readString(Path.of(tempDir.toString() + "/" + FILE_NAME));
 			assertEquals(CONTENT, written);
+		}
+
+		@Test
+		void createsAnEmptyFileInTheConfiguredDirectory_passAFileNameAndInputStream(@TempDir Path tempDir)
+				throws Exception {
+			// Prepare
+			when(directoryProvider.getUploadDirectory()).thenReturn(new File(tempDir.toString()));
+			when(directoryProvider.getUploadMaxFileSize()).thenReturn(42);
+			inputStream = new ByteArrayInputStream("".getBytes("ISO-8859-1"));
+			unitUnderTest = new FileServiceImpl(directoryProvider, inputStreamReader);
+			// Run
+			unitUnderTest.storeStreamContentInFile(FILE_NAME, inputStream);
+			// Check
+			String written = Files.readString(Path.of(tempDir.toString() + "/" + FILE_NAME));
+			assertEquals("", written);
 		}
 
 	}
